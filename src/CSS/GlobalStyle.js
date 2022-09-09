@@ -45,6 +45,17 @@ const GlobalStyle = createGlobalStyle`
         border-collapse: collapse;
         border-spacing: 0;
     }
+
+
+    *{
+        box-sizing: border-box;
+    }
+
+    body{
+        font-family: 'Raleway', sans-serif;
+        background-color: #8c11be;
+    }
+
 `
 
 export default GlobalStyle
