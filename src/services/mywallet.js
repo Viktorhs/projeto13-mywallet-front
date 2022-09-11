@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = 'localhost:5000';
+const BASE_URL = 'http://localhost:5000';
 
 
 function createHeaders(token) {
@@ -16,12 +16,12 @@ function createHeaders(token) {
 
 
 function postLogin(params) {
-    const promise = axios.post(`${BASE_URL}/auth/login`, params);
+    const promise = axios.post(`${BASE_URL}/signin`, params);
     return promise;
 }
 
 function postRegister(params) {
-    const promise = axios.post(`${BASE_URL}/auth/sign-up`, params);
+    const promise = axios.post(`${BASE_URL}/signup`, params);
     return promise;
 }
 

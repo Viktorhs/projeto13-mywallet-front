@@ -12,7 +12,7 @@ export default function Registration(){
         name: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        repeatPassword: ''
     })
 
     function handleForm(e) {
@@ -20,22 +20,26 @@ export default function Registration(){
             ...form,
             [e.target.name]: e.target.value,
         });
+        console.log(form)
     }
 
-    function login(e) {
+    function singUp(e) {
         setWaiting(true)
         e.preventDefault();
-        if(form.password !== form.confirmPassword){
+        if(form.password !== form.repeatPassword){
             alert("Por favor verifique a senha")
             setWaiting(false)
             return 
         }
-        const promise = postRegister({
-            name: form.name,
-            email: form.email,
-            password: form.password})
-        promise.catch(() => {
-            alert('Erro no cadastro tente novamente mais tarde')
+        const promise = postRegister(form)
+        promise.catch((res) => {
+            const error = res.response.status;
+            if(error === 406){
+                alert("Conta ja existente")
+            }
+            if(error === 422){
+                alert("preencha todos os campos")
+            }
             setWaiting(false);
         })
         promise.then((r) => {
@@ -46,11 +50,11 @@ export default function Registration(){
     return (
         <Container>
             <h1>MyWallet</h1>
-            <Form onSubmit={login} active={waiting}>
+            <Form onSubmit={singUp} active={waiting}>
                 <input type="text" name="name" placeholder="Nome" onChange={handleForm} value={form.description} disabled={waiting}/>
                 <input type="email" name="email" placeholder="E-mail" onChange={handleForm} value={form.description} disabled={waiting}/>
                 <input type="password" name="password" placeholder="Senha" onChange={handleForm} value={form.description} disabled={waiting}/>
-                <input type="password" name="confirmPassword" placeholder="Confirme a senha" onChange={handleForm} value={form.description} disabled={waiting}/>
+                <input type="password" name="repeatPassword" placeholder="Confirme a senha" onChange={handleForm} value={form.description} disabled={waiting}/>
 
                 <Button type="submit" active={waiting} disabled={waiting}>
                     {waiting ? <ThreeDots color="#FFFFFF" height={13} width={51} /> : 'Cadastrar'}
