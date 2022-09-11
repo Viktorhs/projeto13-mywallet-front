@@ -36,7 +36,7 @@ export default function Registration(){
             password: form.password})
         promise.catch(() => {
             alert('Erro no cadastro tente novamente mais tarde')
-            setWaiting(false)
+            setWaiting(false);
         })
         promise.then((r) => {
             navigate('/')

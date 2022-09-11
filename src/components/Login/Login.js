@@ -32,7 +32,6 @@ export default function Login(){
         e.preventDefault();
         const promise = postLogin(form)
         promise.catch(() => {
-            alert('Senha ou E-mail invalido')
             setWaiting(false)
             SetWrongData(true)
         })
@@ -88,7 +87,7 @@ const Container = styled.div`
         font-size: 16px;
         line-height: 50px;
 
-        color: #FF3636;
+        color: #FF63C2;
     }
 `
 
@@ -117,6 +116,12 @@ const Form = styled.form`
 
     input::placeholder{
         color:  #000000;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
     }
 
 ` 
