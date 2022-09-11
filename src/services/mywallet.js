@@ -4,15 +4,16 @@ const BASE_URL = 'http://localhost:5000';
 
 
 function createHeaders(token) {
-    const auth = JSON.parse(token)
+    const auth = JSON.parse(localStorage.getItem("mywallet"))
     const config = {
         headers: {
-            Authorization: `Bearer ${auth}`
+            Authorization: `Bearer ${auth.token}`
         }
     };
 
     return config;
 }
+
 
 
 function postLogin(params) {

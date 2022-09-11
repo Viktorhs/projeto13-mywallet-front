@@ -37,10 +37,15 @@ export default function Login(){
         })
         promise.then((r) => {
             const dados = {
-                id: r.data.id,
                 name: r.data.name,
                 token: r.data.token
             }
+
+            localStorage.removeItem("mywallet")
+            let mywalletInf = JSON.stringify(dados)
+            setUser(dados)
+            localStorage.setItem("mywallet", mywalletInf)
+
             setUser(dados)
             navigate('/wallet')
         })

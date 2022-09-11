@@ -23,7 +23,7 @@ export default function Registration(){
         console.log(form)
     }
 
-    function singUp(e) {
+    function signUp(e) {
         setWaiting(true)
         e.preventDefault();
         if(form.password !== form.repeatPassword){
@@ -50,7 +50,7 @@ export default function Registration(){
     return (
         <Container>
             <h1>MyWallet</h1>
-            <Form onSubmit={singUp} active={waiting}>
+            <Form onSubmit={signUp} active={waiting}>
                 <input type="text" name="name" placeholder="Nome" onChange={handleForm} value={form.description} disabled={waiting}/>
                 <input type="email" name="email" placeholder="E-mail" onChange={handleForm} value={form.description} disabled={waiting}/>
                 <input type="password" name="password" placeholder="Senha" onChange={handleForm} value={form.description} disabled={waiting}/>
