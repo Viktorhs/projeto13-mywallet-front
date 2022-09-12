@@ -1,19 +1,18 @@
 import { Form, Button } from "../Login/Login"
-import { useState, useContext } from "react";
+import { useState} from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
-import { postLogin } from "../../services/mywallet"
-import UserContext from "../../contexts/UserContext";
 import styled from "styled-components";
+import { postNewOperation } from "../../services/mywallet";
 
 export default function Input(){
-    const {user} = useContext(UserContext)
     const navigate = useNavigate()
     const [waiting, setWaiting] = useState(false)
 
     const [form, setForm] = useState({
-        valor: '',
-        descricao: '',
+        value: '',
+        description: '',
+        type: 'input'
     })
 
     function handleForm(e) {
@@ -26,7 +25,7 @@ export default function Input(){
     function submitInput(e) {
         setWaiting(true)
         e.preventDefault();
-        const promise = postLogin(form) //alterar função
+        const promise = postNewOperation(form)
         promise.catch(() => {
             setWaiting(false)
         })
@@ -39,8 +38,8 @@ export default function Input(){
     <Container>
         <h1>Nova entrada</h1>
         <Form onSubmit={submitInput} active={waiting}>
-            <input type="number" name="valor" placeholder="Valor" onChange={handleForm} value={form.description} inputMode="numeric" disabled={waiting}/>
-            <input type="text" name="descricao" placeholder="Descrição" onChange={handleForm} value={form.description} disabled={waiting}/>
+            <input type="number" name="value" placeholder="Valor" onChange={handleForm} value={form.value} inputMode="numeric" disabled={waiting} required/>
+            <input type="text" name="description" placeholder="Descrição" onChange={handleForm} value={form.description} disabled={waiting} required/>
 
             <Button type="submit" active={waiting} disabled={waiting}>
                 {waiting ? <ThreeDots color="#FFFFFF" height={13} width={51} /> : 'Salvar entrada'}

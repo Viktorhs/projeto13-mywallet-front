@@ -1,43 +1,104 @@
 import styled from "styled-components"
 import  {RiLogoutBoxRLine} from "react-icons/ri"
 import {IoAddCircleOutline, IoRemoveCircleOutline} from "react-icons/io5"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import WalletList from "./WalletList"
 import { Link, useNavigate } from "react-router-dom"
+import { listOperations, logout } from "../../services/mywallet"
 
 export default function Wallet(){
-
     const navigate = useNavigate()
-    const [totalBalance, setTotalBalance] = useState({
-        value: 2000,
-        isPositive: false
-    })
-    const [test, setTest] = useState([1])
+    const name = JSON.parse(localStorage.getItem("mywallet")).name
+    const [totalBalance, setTotalBalance] = useState({        
+        value: 0,
+        isPositive: true})
+    const [wallet, setWallet] = useState([])
+    const [reaload, setReaload] = useState(false)
+
+    function totalValue(item){
+        let aux = 0
+        for(let i = 0 ; i < item.length; i++){
+            const value = item[i].value 
+            if(item[i].type === "input"){
+                aux = aux + Number(value)
+            }
+            if(item[i].type === "output"){
+                aux = aux - Number(value)
+            }
+        }
+        aux = aux.toFixed(2)
+        if(aux > 0){
+            aux = aux.toString()
+            setTotalBalance({
+                value: aux,
+                isPositive: true
+            })
+        }
+
+        if(aux < 0){
+            aux = aux.toString().replace("-", "")
+            setTotalBalance({
+                value: aux,
+                isPositive: false
+            })
+        }
+    }
+
+    useEffect(() => {
+        const promisse = listOperations()
+        promisse.catch(() => {
+            alert('Erro de comunicação com o servidor')
+        })
+        promisse.then((r) => {
+            setWallet(r.data)
+            totalValue(r.data)
+        })
+    }, [reaload])
+
+    function isLogout(){
+        if(window.confirm("deseja mesmo sair?")){
+            const promisse = logout()
+            promisse.catch(() => {
+                alert('Erro de comunicação com o servidor')
+            })
+            promisse.then((r) => {
+                localStorage.removeItem("mywallet")
+                navigate("/")
+            })
+        }
+
+    }
 
     return(
         <Container>
             <Header>
-                <h1>Ola, Fulano</h1>
-                <span><RiLogoutBoxRLine/></span>
+                <h1>Ola, {name}</h1>
+                <span onClick={()=>isLogout()}><RiLogoutBoxRLine/></span>
             </Header>
 
-            {test.length === 0 ? 
+            {(wallet.length === 0) ? 
             <WalletBox>
                 <h5>Não há registros de entrada ou saída</h5>
             </WalletBox> 
             :
             <WalletBox>
                 <ul>
-                    <WalletList value={200} date ={"06/11"} operation={"input"}>teste</WalletList>
-                    <WalletList value={200} date ={"06/11"} operation={"output"}>teste</WalletList>
+                    {wallet.map((item, index) => <WalletList 
+                    key={index} 
+                    value={item.value} 
+                    date ={item.data} 
+                    operation={item.type}
+                    id = {item._id}
+                    reaload = {reaload}
+                    setReaload={setReaload}>{item.description}</WalletList>)}
                 </ul>
                 <Balance isPositive={totalBalance.isPositive}>
                     <h2>SALDO</h2>
-                    <h3>{totalBalance.value.toFixed(2)}</h3>
+                    <h3>{totalBalance.value}</h3>
                 </Balance>
             </WalletBox>}
             <Buttons>
-                <Link to="entrada">                
+                <Link to="/entrada">                
                     <div>
                     <span><IoAddCircleOutline/></span>
                     <p>Nova entrada</p>

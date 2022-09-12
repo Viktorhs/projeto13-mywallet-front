@@ -21,8 +21,8 @@ export default function App(){
                     <Route path="/" element={<Login/>}/>
                     <Route path="/cadastro" element={<Registration/>}/>
                     <Route path="/wallet" element={<Wallet/>}/>
-                    <Route path="/saida" element={<Output/>}/>
-                    <Route path="/entrada" element={<Input/>}/>
+                    <Route path="saida" element={<Output/>}/>
+                    <Route path="entrada" element={<Input/>}/>
                 </Routes>
             </BrowserRouter>
         </UserContext.Provider>

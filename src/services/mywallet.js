@@ -26,7 +26,37 @@ function postRegister(params) {
     return promise;
 }
 
+function listOperations() {
+    const header = createHeaders()
+    console.log(header)
+    const promise = axios.get(`${BASE_URL}/listWallets`, header);
+    return promise;
+}
+
+function logout() {
+    const header = createHeaders()
+    console.log(header)
+    const promise = axios.delete(`${BASE_URL}/logout` ,header);
+    return promise;
+}
+
+function postNewOperation(params) {
+    const header = createHeaders();
+    const promise = axios.post(`${BASE_URL}/operation`, params, header);
+    return promise;
+}
+
+function deleteOperation(id) {
+    const header = createHeaders();
+    const promise = axios.delete(`${BASE_URL}/delete/${id}`, header);
+    return promise
+}
+
 export {
     postLogin,
-    postRegister
+    postRegister,
+    listOperations,
+    logout,
+    postNewOperation,
+    deleteOperation
 };
